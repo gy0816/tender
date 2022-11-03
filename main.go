@@ -32,7 +32,8 @@ func main() {
 	app:=NewKVStoreApplication(db)
 	flag.Parse()
 
-	logger:= log.NewTMLogger(log.NewSyncWriter(os.Stdout))
+	w := log.NewSyncWriter(os.Stderr)
+	logger := log.NewLogfmtLogger(w)
 
 	server := abciserver.NewSocketServer(socketAddr, app)
 	server.SetLogger(logger)
