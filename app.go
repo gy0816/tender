@@ -61,7 +61,7 @@ func (app *KVStoreApplication) IsValid(tx []byte) (code uint32){
 	key, value := parts[0], parts[1]
 
 	err:=app.db.View(func(txn *badger.Txn)error{
-		item, err := txn.Get("key")
+		item, err := txn.Get(key)
 		if err != nil && err != badger.ErrKeyNotFound {
 			return err
 		}
@@ -88,7 +88,7 @@ func(app *KVStoreApplication) CheckTx(req abcitypes.RequestCheckTx)abcitypes.Res
 
 
 
-func(app *KVStoreApplication) BeginBlock (req abcitypes.RequestBeginBlock) abcitypes.responseBeginBlock{
+func(app *KVStoreApplication) BeginBlock (req abcitypes.RequestBeginBlock) abcitypes.ResponseBeginBlock{
 	app.currentBatch=app.db.NewTransaction(true)
 	return abcitypes.ResponseBeginBlock{}
 }
@@ -104,7 +104,7 @@ func(app *KVStoreApplication) DeliverTx(req abcitypes.RequestDeliverTx) abcitype
 
 	err:=app.currentBatch.Set(key, value)
 	if err != nil {
-		pacin(err)
+		panic(err)
 	}
 	return abcitypes.ResponseDeliverTx{Code:0}
 }
@@ -113,19 +113,19 @@ func(app *KVStoreApplication) DeliverTx(req abcitypes.RequestDeliverTx) abcitype
 
 func(app * KVStoreApplication)Commit() abcitypes.ResponseCommit {
 	app.currentBatch.Commit()
-	return abcitypes.ResponseCommit{Data: []bytes{}}
+	return abcitypes.ResponseCommit{Data: []byte{}}
 }
 
 
 
-func (app *KVStoreApplication) Query(reqQuery abcitypes.ResquestQeury)(resQuery abcitypes.ResponseQuery){
-	resQuery.key = reqQuery.Data
+func (app *KVStoreApplication) Query(reqQuery abcitypes.ResquestQuery)(resQuery abcitypes.ResponseQuery){
+	resQuery.Key = reqQuery.Data
 	err:=app.db.View(func(txn *badger.Txn)error {
 		item, err := txn.Get(reqQuery.Data)
-		if err != nil && err != badger.ErrKeyNotFount{
+		if err != nil && err != badger.ErrKeyNotFound{
 			return err
 		}
-		if err == bager.ErrKeyNotFound {
+		if err == badger.ErrKeyNotFound {
 			resQuery.Log = "does not exist"
 		}else{
 			return item.Value(func(val []byte)error{
@@ -135,10 +135,11 @@ func (app *KVStoreApplication) Query(reqQuery abcitypes.ResquestQeury)(resQuery 
 			})
 		}
 		return nil
-		if err != nil {
-			panic(err)
-		}
 	})
+	if err != nil {
+		panic(err)
+	}
+	return
 }
 
 
