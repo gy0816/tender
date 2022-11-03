@@ -8,10 +8,8 @@ import (
 	"syscall"
 
 	"github.com/dgraph-io/badger"
-
+	"github.com/tendermint/tendermint/libs/log"
 	abciserver "github.com/tendermint/tendermint/abci/server"
-	
-	log "github.com/tendermint/tendermint/libs/log"
 )
 
 
@@ -32,8 +30,8 @@ func main() {
 	app:=NewKVStoreApplication(db)
 	flag.Parse()
 
-	w := log.NewSyncWriter(os.Stdout)
-	logger := log.NewLogfmtLogger(w)
+	var logger log.Logger
+	logger = log.NewLogfmtLogger(log.NewSyncWriter(os.Stderr))
 
 	server := abciserver.NewSocketServer(socketAddr, app)
 	server.SetLogger(logger)
