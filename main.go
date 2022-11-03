@@ -11,7 +11,7 @@ import (
 
 	abciserver "github.com/tendermint/tendermint/abci/server"
 	
-	"github.com/tendermint/tendermint/libs/log"
+	log "github.com/tendermint/tendermint/libs/log"
 )
 
 
@@ -32,7 +32,7 @@ func main() {
 	app:=NewKVStoreApplication(db)
 	flag.Parse()
 
-	w := log.NewSyncWriter(os.Stderr)
+	w := log.NewSyncWriter(os.Stdout)
 	logger := log.NewLogfmtLogger(w)
 
 	server := abciserver.NewSocketServer(socketAddr, app)
