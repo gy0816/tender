@@ -118,7 +118,7 @@ func(app * KVStoreApplication)Commit() abcitypes.ResponseCommit {
 
 
 
-func (app *KVStoreApplication) Query(reqQuery abcitypes.ResquestQuery)(resQuery abcitypes.ResponseQuery){
+func (app *KVStoreApplication) Query(reqQuery abcitypes.RequestQuery)(resQuery abcitypes.ResponseQuery){
 	resQuery.Key = reqQuery.Data
 	err:=app.db.View(func(txn *badger.Txn)error {
 		item, err := txn.Get(reqQuery.Data)
