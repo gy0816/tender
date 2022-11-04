@@ -6,10 +6,11 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-
+	"github.com/go-kit/kit/log"
 	"github.com/dgraph-io/badger"
-	"github.com/tendermint/tendermint/libs/log"
+	//"github.com/tendermint/tendermint/libs/log"
 	abciserver "github.com/tendermint/tendermint/abci/server"
+
 )
 
 
@@ -31,7 +32,8 @@ func main() {
 	flag.Parse()
 
 	var logger log.Logger
-	logger = log.NewLogfmtLogger(log.NewSyncWriter(os.Stderr))
+	logger = log.NewLogfmtLogger(log.NewSyncWriter(os.Stdout))
+	
 
 	server := abciserver.NewSocketServer(socketAddr, app)
 	server.SetLogger(logger)

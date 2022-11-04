@@ -5,7 +5,6 @@ go 1.18
 require (
 	github.com/dgraph-io/badger v1.6.2
 	github.com/tendermint/tendermint v0.35.9
-	github.com/tendermint/tendermint/libs/log
 )
 
 require (
