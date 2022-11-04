@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/dgraph-io/badger v1.6.2
+	github.com/go-kit/kit v0.12.0
 	github.com/tendermint/tendermint v0.35.9
 )
 
@@ -13,6 +14,8 @@ require (
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/dgraph-io/ristretto v0.0.3-0.20200630154024-f66de99634de // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
+	github.com/go-kit/log v0.2.0 // indirect
+	github.com/go-logfmt/logfmt v0.5.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
